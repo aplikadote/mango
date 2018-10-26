@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/aplikadote/say"
+)
 
 func main() {
-	fmt.Println("Hello, Mango!")
+	fmt.Println(say.Say("oliwi2"))
+
 }
