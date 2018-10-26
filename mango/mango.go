@@ -1,12 +1,11 @@
-package main
+package mango
 
 import (
 	"fmt"
 
-	"github.com/aplikadote/say"
+	"github.com/aplikadote/mango/say"
 )
 
-func main() {
+func Write() {
 	fmt.Println(say.Say("oliwi2"))
-
 }
