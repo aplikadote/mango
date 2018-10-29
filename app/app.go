@@ -1,16 +1,16 @@
 package main
 
 import "fmt"
+import "github.com/aplikadote/mango/core/tuple"
 
-import "github.com/aplikadote/mango/point"
+//import "github.com/aplikadote/mango/core/tupletype"
+import "github.com/vjeantet/jodaTime"
 
 func main() {
-	fmt.Println("oli")
-	v := point.New(1, 2)
-	//v := point.Create()
-	fmt.Println(v)
-	fmt.Println(v.GetX())
-	fmt.Println(v.GetY())
-	fmt.Println(v.Z)
-	fmt.Println(v.Abs())
+	from, _ := jodaTime.Parse("dd/MM/YYYY", "01/01/2000")
+	to, _ := jodaTime.Parse("dd/MM/YYYY", "02/01/2000")
+
+	t := tuple.Tuple{From: from, To: to}
+	fmt.Println(t.String())
+
 }
