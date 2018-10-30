@@ -1,9 +1,9 @@
-package tupletype
+package tuple
 
-type TupleType int
+type Type int
 
 const (
-	MC TupleType = iota
+	MC Type = iota
 	MP
 	DONP
 	DO
@@ -23,14 +23,14 @@ var fullnames = [...]string{
 	"Detencion Operacional",
 }
 
-func (tt TupleType) Name() string {
+func (tt Type) Name() string {
 	return names[tt]
 }
 
-func (tt TupleType) Fullname() string {
+func (tt Type) Fullname() string {
 	return fullnames[tt]
 }
 
-func (tt TupleType) String() string {
+func (tt Type) String() string {
 	return names[tt]
 }

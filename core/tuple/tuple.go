@@ -3,17 +3,16 @@ package tuple
 import (
 	"time"
 
-	"github.com/aplikadote/mango/core/tupletype"
 	"github.com/vjeantet/jodaTime"
 )
 
 type Tuple struct {
 	from time.Time
 	to   time.Time
-	tt   tupletype.TupleType
+	tt   Type
 }
 
-func Init(from, to time.Time, tt tupletype.TupleType) *Tuple {
+func Init(from, to time.Time, tt Type) *Tuple {
 	tuple := &Tuple{}
 	tuple.from = from
 	tuple.to = to

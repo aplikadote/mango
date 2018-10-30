@@ -1,4 +1,4 @@
-package main
+package filehandling
 
 import (
 	"bufio"
@@ -8,13 +8,13 @@ import (
 	"os"
 )
 
-func main() {
+func makeChain() {
 	// Load a TXT file.
-	f, _ := os.Open("D:\\test.csv")
+	f, _ := os.Open("test.csv")
 
 	// Create a new reader.
 	r := csv.NewReader(bufio.NewReader(f))
-	r.Comma = ";"
+	r.Comma = ';'
 	for {
 		record, err := r.Read()
 		// Stop at EOF.

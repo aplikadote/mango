@@ -3,20 +3,18 @@ package subsystem
 import "github.com/aplikadote/mango/core/tuple"
 
 type Subsystem struct {
-	name      string
-	nickname  string
-	impact    float64
-	minToWork int
+	Name      string
+	Nickname  string
+	Type      Type
+	Impact    float64
+	MinToWork int
 	parent    *Subsystem
 	children  []*Subsystem
 	tuples    []*tuple.Tuple
 }
 
-func Init(name, nickname string) *Subsystem {
-	ss := &Subsystem{}
-	ss.name = name
-	ss.nickname = nickname
-	return ss
+func NewSubsystem(name, nick string) *Subsystem {
+	return &Subsystem{Name: name, Nickname: nick}
 }
 
 func (ss *Subsystem) Children() []*Subsystem {
@@ -42,6 +40,20 @@ func (ss *Subsystem) Tuples() []*tuple.Tuple {
 	return ss.tuples
 }
 
+func (ss *Subsystem) PreOrden(visitor func(*Subsystem)) {
+	visitor(ss)
+	for _, child := range ss.children {
+		child.PreOrden(visitor)
+	}
+}
+
+func (ss *Subsystem) PostOrden(visitor func(*Subsystem)) {
+	for _, child := range ss.children {
+		child.PreOrden(visitor)
+	}
+	visitor(ss)
+}
+
 func (ss *Subsystem) String() string {
-	return ss.name
+	return ss.Name
 }
