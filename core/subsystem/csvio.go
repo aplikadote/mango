@@ -14,7 +14,7 @@ type CsvLine struct {
 	ss       *Subsystem
 }
 
-func MakeChain(f *os.File) *Chain {
+func ImportChain(f *os.File) *Chain {
 	// Load a TXT file.
 	//f, _ := os.Open("test.csv")
 

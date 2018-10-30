@@ -38,7 +38,7 @@ func main() {
 	//	byref(array[:])
 
 	f, _ := os.Open("/home/rgonzalez/TRANSPORTE/addons/structure.csv")
-	chain := subsystem.MakeChain(f)
+	chain := subsystem.ImportChain(f)
 
 	printss := func(ss *subsystem.Subsystem) {
 		fmt.Println(ss)
