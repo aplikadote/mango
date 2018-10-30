@@ -8,13 +8,21 @@ import (
 )
 
 type Tuple struct {
-	From time.Time
-	To   time.Time
-	Tt   tupletype.TupleType
+	from time.Time
+	to   time.Time
+	tt   tupletype.TupleType
+}
+
+func Init(from, to time.Time, tt tupletype.TupleType) *Tuple {
+	tuple := &Tuple{}
+	tuple.from = from
+	tuple.to = to
+	tuple.tt = tt
+	return tuple
 }
 
 func (t *Tuple) String() string {
-	fromStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", t.From)
-	toStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", t.To)
-	return "[" + fromStr + " - " + toStr + "]"
+	fromStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", t.from)
+	toStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", t.to)
+	return "[" + fromStr + " - " + toStr + "; " + t.tt.Name() + "]"
 }

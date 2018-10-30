@@ -1,27 +1,33 @@
 package main
 
 import (
-	// "flag"
+	"bufio"
+	"encoding/csv"
 	"fmt"
-	"io/ioutil"
-	// "github.com/gobuffalo/packr"
+	"io"
+	"os"
 )
 
 func main() {
-	//	box := packr.NewBox("../filehandling")
-	//	data, _ := box.FindString("test.txt")
-	//	fmt.Println("Contents of file:", data)
+	// Load a TXT file.
+	f, _ := os.Open("D:\\test.csv")
 
-	//	fptr1 := flag.String("fpath", "test.txt", "Ubicacion del archivo")
-	//	fptr2 := flag.String("fsep", ";", "Separador de campos")
-	//	flag.Parse()
-	//	fmt.Println("value of fpath is", *fptr1)
-	//	fmt.Println("value of fsep is", *fptr2)
-
-	data, err := ioutil.ReadFile("test.txt")
-	if err != nil {
-		fmt.Println("File reading error", err)
-		return
+	// Create a new reader.
+	r := csv.NewReader(bufio.NewReader(f))
+	r.Comma = ";"
+	for {
+		record, err := r.Read()
+		// Stop at EOF.
+		if err == io.EOF {
+			break
+		}
+		// Display record.
+		// ... Display record length.
+		// ... Display all individual elements of the slice.
+		fmt.Println(record)
+		fmt.Println(len(record))
+		for value := range record {
+			fmt.Printf("  %v\n", record[value])
+		}
 	}
-	fmt.Println("Contents of file:", string(data))
 }
