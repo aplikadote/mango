@@ -12,7 +12,7 @@ type Tuple struct {
 	tupleType TupleType
 }
 
-func Init(from, to time.Time, tupleType TupleType) *Tuple {
+func NewTuple(from, to time.Time, tupleType TupleType) *Tuple {
 	tuple := &Tuple{}
 	tuple.from = from
 	tuple.to = to

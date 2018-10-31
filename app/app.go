@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -9,21 +9,24 @@ import (
 	_ "github.com/vjeantet/jodaTime"
 )
 
-func main() {
-	//	f, err := os.Open("/home/rgonzalez/TRANSPORTE/addons/structure.csv")
-	f, err := os.Open("D:\\TRANSPORTE\\addons\\structure.csv")
+func StartApp() {
+	f, err := os.Open("/home/rgonzalez/TRANSPORTE/addons/structure.csv")
+	//f, err := os.Open("D:\\TRANSPORTE\\addons\\structure.csv")
 
 	if err != nil {
-		fmt.Println(err)
-		fmt.Println(f)
-		return
+		panic(err)
 	}
-	chain := subsystem.ImportChain(f)
 
-	//	chain.RootSubsystem().PreOrden(func(ss *subsystem.Subsystem) {
-	//		fmt.Println(ss.Parent())
-	//	})
+	chain, err := subsystem.ImportChain(f)
+	if err != nil {
+		panic(err)
+	}
 
-	f1, _ := os.Create("D:\\exportTest.csv")
-	subsystem.ExportChain(f1, chain)
+	chain.RootSubsystem().PreOrden(func(ss *subsystem.Subsystem) {
+		fmt.Println(ss.Name)
+	})
+
+	//	efilename := "/home/rgonzalez/exportTest.csv"
+	//	f1, _ := os.Create(efilename)
+	//	subsystem.ExportChain(f1, chain)
 }

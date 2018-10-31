@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type CsvLine struct {
@@ -14,44 +15,32 @@ type CsvLine struct {
 	ss       *Subsystem
 }
 
-func ImportChain(f *os.File) *Chain {
+func ImportChain(f *os.File) (*Chain, error) {
 	// Create a new reader.
 	r := csv.NewReader(bufio.NewReader(f))
 	r.Comma = ';'
 
 	//	lines := []CsvLine{}
-	idToLine := make(map[int]CsvLine)
+	idToLine := make(map[int]*CsvLine)
 	var root *CsvLine
+	var err error
+	var record []string
+	var line *CsvLine
 
 	for {
-		record, err := r.Read()
 		// Stop at EOF.
-		if err == io.EOF {
+		if record, err = r.Read(); err == io.EOF {
 			break
 		}
 
-		//		fmt.Println(record)
+		line, err = parseCsvLine(record)
+		if err != nil {
+			return nil, err
+		}
 
-		id, _ := strconv.Atoi(record[0])
-		idParent, _ := strconv.Atoi(record[1])
-		name := record[2]
-		nick := record[3]
-		ssType, _ := ParseSubsystemType(record[4])
-		impact := parseDouble(record[5])
-		minToWork, _ := strconv.Atoi(record[6])
-
-		ss := NewSubsystem(name, nick)
-		ss.SsType = ssType
-		ss.Impact = impact
-		ss.MinToWork = minToWork
-
-		line := CsvLine{id, idParent, ss}
-		//		lines = append(lines, line)
-
-		idToLine[id] = line
-
-		if idParent == -1 {
-			root = &line
+		idToLine[line.id] = line
+		if line.idParent == -1 {
+			root = line
 		}
 	}
 
@@ -66,7 +55,42 @@ func ImportChain(f *os.File) *Chain {
 
 	chain := NewChain()
 	chain.SetRootSubsystem(root.ss)
-	return chain
+	return chain, nil
+}
+
+func parseCsvLine(record []string) (*CsvLine, error) {
+	var err error
+	var id, idParent int
+
+	if id, err = strconv.Atoi(record[0]); err != nil {
+		return nil, err
+	}
+
+	if idParent, err = strconv.Atoi(record[1]); err != nil {
+		return nil, err
+	}
+
+	name := record[2]
+	nick := record[3]
+
+	var ssType SubsystemType
+	if ssType, err = ParseSubsystemType(record[4]); err != nil {
+		return nil, err
+	}
+
+	var impact float64
+	if impact, err = parseDouble(record[5]); err != nil {
+		return nil, err
+	}
+
+	minToWork, _ := strconv.Atoi(record[6])
+
+	ss := NewSubsystem(name, nick)
+	ss.SsType = ssType
+	ss.Impact = impact
+	ss.MinToWork = minToWork
+
+	return &CsvLine{id, idParent, ss}, nil
 }
 
 func ExportChain(f *os.File, chain *Chain) {
@@ -99,7 +123,7 @@ func ExportChain(f *os.File, chain *Chain) {
 		w.WriteString(";")
 		w.WriteString(ss.SsType.String())
 		w.WriteString(";")
-		w.WriteString(strconv.FormatFloat(ss.Impact, 'f', 6, 64))
+		w.WriteString(formatDouble(ss.Impact))
 		w.WriteString(";")
 		w.WriteString(strconv.Itoa(ss.MinToWork))
 		w.WriteString("\n")
@@ -108,6 +132,10 @@ func ExportChain(f *os.File, chain *Chain) {
 	w.Flush()
 }
 
-func parseDouble(s string) float64 {
-	return float64(1)
+func parseDouble(str string) (float64, error) {
+	return strconv.ParseFloat(strings.Replace(str, ",", ".", -1), 64)
+}
+
+func formatDouble(value float64) string {
+	return strings.Replace(strconv.FormatFloat(value, 'f', 6, 64), ".", ",", -1)
 }
