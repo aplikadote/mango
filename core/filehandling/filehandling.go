@@ -1,33 +1,32 @@
-package filehandling
+package main
 
 import (
 	"bufio"
-	"encoding/csv"
 	"fmt"
-	"io"
 	"os"
 )
 
-func makeChain() {
-	// Load a TXT file.
-	f, _ := os.Open("test.csv")
+func main() {
+	Test()
+}
 
-	// Create a new reader.
-	r := csv.NewReader(bufio.NewReader(f))
-	r.Comma = ';'
-	for {
-		record, err := r.Read()
-		// Stop at EOF.
-		if err == io.EOF {
-			break
-		}
-		// Display record.
-		// ... Display record length.
-		// ... Display all individual elements of the slice.
-		fmt.Println(record)
-		fmt.Println(len(record))
-		for value := range record {
-			fmt.Printf("  %v\n", record[value])
-		}
+func Test() {
+	filename := "D:\\makefile.txt"
+	//	f, err := os.Create(filename)
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0600)
+	check(err)
+
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	n4, err := w.WriteString("Oliwis")
+	fmt.Printf("wrote %d bytes\n", n4)
+
+	w.Flush()
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
 	}
 }

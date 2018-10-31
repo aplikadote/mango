@@ -2,10 +2,10 @@ package subsystem
 
 import "errors"
 
-type Type int
+type SubsystemType int
 
 const (
-	LINEAR Type = iota
+	LINEAR SubsystemType = iota
 	FRACTION
 	PARALLEL
 	REDUNDANT
@@ -34,19 +34,19 @@ var fullnames = [...]string{
 	"STOCKPILE",
 }
 
-func (tt Type) Name() string {
-	return names[tt]
+func (tt *SubsystemType) Name() string {
+	return names[*tt]
 }
 
-func (tt Type) Fullname() string {
-	return fullnames[tt]
+func (tt *SubsystemType) Fullname() string {
+	return fullnames[*tt]
 }
 
-func (tt Type) String() string {
-	return names[tt]
+func (tt *SubsystemType) String() string {
+	return names[*tt]
 }
 
-func ParseType(str string) (Type, error) {
+func ParseSubsystemType(str string) (SubsystemType, error) {
 	index := -1
 	for i, val := range names {
 		if str == val {
@@ -56,7 +56,7 @@ func ParseType(str string) (Type, error) {
 	}
 
 	if index != -1 {
-		return Type(index), nil
+		return SubsystemType(index), nil
 	} else {
 		err := errors.New("tipo no soportado")
 		return -1, err

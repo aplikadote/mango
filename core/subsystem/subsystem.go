@@ -5,7 +5,7 @@ import "github.com/aplikadote/mango/core/tuple"
 type Subsystem struct {
 	Name      string
 	Nickname  string
-	Type      Type
+	SsType    SubsystemType
 	Impact    float64
 	MinToWork int
 	parent    *Subsystem
@@ -23,6 +23,7 @@ func (ss *Subsystem) Children() []*Subsystem {
 
 func (ss *Subsystem) AddChild(child *Subsystem) {
 	ss.children = append(ss.children, child)
+	child.parent = ss
 }
 
 func (ss *Subsystem) DeleteChild(child *Subsystem) {
@@ -34,6 +35,11 @@ func (ss *Subsystem) DeleteChild(child *Subsystem) {
 		}
 	}
 	ss.children = append(ss.children[:index], ss.children[index+1:]...)
+	child.parent = nil
+}
+
+func (ss *Subsystem) Parent() *Subsystem {
+	return ss.parent
 }
 
 func (ss *Subsystem) Tuples() []*tuple.Tuple {

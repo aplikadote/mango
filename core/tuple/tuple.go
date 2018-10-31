@@ -7,21 +7,21 @@ import (
 )
 
 type Tuple struct {
-	from time.Time
-	to   time.Time
-	tt   Type
+	from      time.Time
+	to        time.Time
+	tupleType TupleType
 }
 
-func Init(from, to time.Time, tt Type) *Tuple {
+func Init(from, to time.Time, tupleType TupleType) *Tuple {
 	tuple := &Tuple{}
 	tuple.from = from
 	tuple.to = to
-	tuple.tt = tt
+	tuple.tupleType = tupleType
 	return tuple
 }
 
-func (t *Tuple) String() string {
-	fromStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", t.from)
-	toStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", t.to)
-	return "[" + fromStr + " - " + toStr + "; " + t.tt.Name() + "]"
+func (tuple *Tuple) String() string {
+	fromStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", tuple.from)
+	toStr := jodaTime.Format("dd/MM/YYYY HH:mm:ss", tuple.to)
+	return "[" + fromStr + " - " + toStr + "; " + tuple.tupleType.Name() + "]"
 }
